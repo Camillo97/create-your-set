@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dialog } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/components/ui/use-toast";
 
@@ -11,13 +11,15 @@ interface Product {
 }
 
 const availablePolishes: Product[] = [
-  { id: "1", name: "Lakier hybrydowy Mat White", price: 39.99, image: "/placeholder.svg" },
-  { id: "2", name: "Lakier hybrydowy Princess Red", price: 39.99, image: "/placeholder.svg" },
-  { id: "3", name: "Lakier hybrydowy Lush", price: 39.99, image: "/placeholder.svg" },
-  { id: "4", name: "Lakier hybrydowy Sexy Plum", price: 39.99, image: "/placeholder.svg" },
-  { id: "5", name: "Lakier hybrydowy Holika", price: 39.99, image: "/placeholder.svg" },
-  { id: "6", name: "Lakier hybrydowy Max Black", price: 39.99, image: "/placeholder.svg" },
+  { id: "1", name: "Lakier hybrydowy Mat White", price: 39.99, image: "https://pbnails.pl/files/fotob/product-2337.jpg" },
+  { id: "2", name: "Lakier hybrydowy Princess Red", price: 39.99, image: "https://pbnails.pl/files/fotob/product-2330.jpg" },
+  { id: "3", name: "Lakier hybrydowy Lush", price: 39.99, image: "https://pbnails.pl/files/fotob/product-2336.jpg" },
+  { id: "4", name: "Lakier hybrydowy Sexy Plum", price: 39.99, image: "https://pbnails.pl/files/fotob/product-2334.jpg" },
+  { id: "5", name: "Lakier hybrydowy Holika", price: 39.99, image: "https://pbnails.pl/files/fotob/product-2341.jpg" },
+  { id: "6", name: "Lakier hybrydowy Max Black", price: 39.99, image: "https://pbnails.pl/files/fotob/product-2342.png" },
 ];
+
+const MAX_SELECTIONS = 5;
 
 const Index = () => {
   const [selectedImage, setSelectedImage] = useState(0);
@@ -36,10 +38,10 @@ const Index = () => {
       if (current.includes(polishId)) {
         return current.filter((id) => id !== polishId);
       }
-      if (current.length >= 5) {
+      if (current.length >= MAX_SELECTIONS) {
         toast({
           title: "Maksymalna ilość produktów",
-          description: "Możesz wybrać maksymalnie 5 produktów do zestawu.",
+          description: `Możesz wybrać maksymalnie ${MAX_SELECTIONS} produktów do zestawu.`,
           variant: "destructive",
         });
         return current;
@@ -99,7 +101,7 @@ const Index = () => {
             <p className="text-2xl font-bold">199,99 zł</p>
             <button
               onClick={() => setIsModalOpen(true)}
-              className="w-full py-3 px-4 bg-primary text-white rounded-md hover:bg-primary-hover transition-colors"
+              className="w-full py-3 px-4 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors"
             >
               Stwórz zestaw
             </button>
@@ -109,21 +111,32 @@ const Index = () => {
 
       {/* Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <h2 className="text-2xl font-semibold mb-4">Stwórz własny zestaw</h2>
-            <p className="text-gray-600 mb-4">
-              Wybierz do 5 lakierów hybrydowych do swojego zestawu
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-semibold">Stwórz własny zestaw</DialogTitle>
+          </DialogHeader>
+          <div className="mt-4">
+            <p className="text-gray-600 mb-2">
+              Wybierz do {MAX_SELECTIONS} lakierów hybrydowych do swojego zestawu. Pozostało:{" "}
+              <span className="font-semibold">
+                {MAX_SELECTIONS - selectedPolishes.length} z {MAX_SELECTIONS}
+              </span>
             </p>
             <div className="space-y-4">
               {availablePolishes.map((polish) => (
-                <div key={polish.id} className="flex items-center space-x-4">
+                <div key={polish.id} className="flex items-center space-x-4 p-2 hover:bg-gray-50 rounded-lg">
                   <Checkbox
                     id={polish.id}
                     checked={selectedPolishes.includes(polish.id)}
                     onCheckedChange={() => handlePolishSelection(polish.id)}
+                    className="h-6 w-6 rounded-md border-2"
                   />
-                  <label htmlFor={polish.id} className="flex-1">
+                  <img
+                    src={polish.image}
+                    alt={polish.name}
+                    className="w-16 h-16 object-cover rounded-md"
+                  />
+                  <label htmlFor={polish.id} className="flex-1 cursor-pointer">
                     {polish.name}
                   </label>
                   <span className="text-gray-600">{polish.price} zł</span>
@@ -143,14 +156,14 @@ const Index = () => {
                 </button>
                 <button
                   onClick={handleCreateSet}
-                  className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-hover"
+                  className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90"
                 >
                   Zatwierdź zestaw
                 </button>
               </div>
             </div>
           </div>
-        </div>
+        </DialogContent>
       </Dialog>
     </div>
   );

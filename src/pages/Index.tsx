@@ -68,8 +68,8 @@ const Index = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div className="container mx-auto px-4 py-4 sm:py-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
         {/* Left column - Images */}
         <div className="space-y-4">
           <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
@@ -95,10 +95,10 @@ const Index = () => {
         </div>
 
         {/* Right column - Product info */}
-        <div className="space-y-6">
-          <h1 className="text-3xl font-semibold">Zestaw lakierów hybrydowych Bestsellers</h1>
+        <div className="space-y-4 sm:space-y-6">
+          <h1 className="text-2xl sm:text-3xl font-semibold">Zestaw lakierów hybrydowych Bestsellers</h1>
           <div className="space-y-2">
-            <p className="text-2xl font-bold">199,99 zł</p>
+            <p className="text-xl sm:text-2xl font-bold">199,99 zł</p>
             <button
               onClick={() => setIsModalOpen(true)}
               className="w-full py-3 px-4 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors"
@@ -111,52 +111,54 @@ const Index = () => {
 
       {/* Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="w-[95vw] max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-semibold">Stwórz własny zestaw</DialogTitle>
+            <DialogTitle className="text-xl sm:text-2xl font-semibold">Stwórz własny zestaw</DialogTitle>
           </DialogHeader>
           <div className="mt-4">
-            <p className="text-gray-600 mb-2">
+            <p className="text-sm sm:text-base text-gray-600 mb-2">
               Wybierz do {MAX_SELECTIONS} lakierów hybrydowych do swojego zestawu. Pozostało:{" "}
               <span className="font-semibold">
                 {MAX_SELECTIONS - selectedPolishes.length} z {MAX_SELECTIONS}
               </span>
             </p>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {availablePolishes.map((polish) => (
-                <div key={polish.id} className="flex items-center space-x-4 p-2 hover:bg-gray-50 rounded-lg">
-                  <Checkbox
-                    id={polish.id}
-                    checked={selectedPolishes.includes(polish.id)}
-                    onCheckedChange={() => handlePolishSelection(polish.id)}
-                    className="h-6 w-6 rounded-md border-2"
-                  />
+                <div key={polish.id} className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg">
+                  <div className="flex-shrink-0">
+                    <Checkbox
+                      id={polish.id}
+                      checked={selectedPolishes.includes(polish.id)}
+                      onCheckedChange={() => handlePolishSelection(polish.id)}
+                      className="h-6 w-6 rounded-md border-2"
+                    />
+                  </div>
                   <img
                     src={polish.image}
                     alt={polish.name}
-                    className="w-16 h-16 object-cover rounded-md"
+                    className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded-md flex-shrink-0"
                   />
-                  <label htmlFor={polish.id} className="flex-1 cursor-pointer">
+                  <label htmlFor={polish.id} className="flex-1 text-sm sm:text-base cursor-pointer">
                     {polish.name}
                   </label>
-                  <span className="text-gray-600">{polish.price} zł</span>
+                  <span className="text-sm sm:text-base text-gray-600 flex-shrink-0">{polish.price} zł</span>
                 </div>
               ))}
             </div>
-            <div className="mt-6 flex justify-between items-center">
-              <p className="text-lg font-semibold">
+            <div className="mt-6 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+              <p className="text-base sm:text-lg font-semibold">
                 Razem: {(selectedPolishes.length * 39.99).toFixed(2)} zł
               </p>
-              <div className="space-x-4">
+              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800 w-full sm:w-auto"
                 >
                   Anuluj
                 </button>
                 <button
                   onClick={handleCreateSet}
-                  className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90"
+                  className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 w-full sm:w-auto"
                 >
                   Zatwierdź zestaw
                 </button>

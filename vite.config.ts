@@ -4,14 +4,14 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 export default defineConfig(({ mode }) => ({
-  base: "/", // Ścieżka bazowa dla Render
+  base: "/",
   server: {
-    host: "0.0.0.0", // Nasłuchuj na wszystkich interfejsach sieciowych
-    port: parseInt(process.env.PORT || "4173", 10), // Dynamiczny port Render
+    host: "0.0.0.0",
+    port: parseInt(process.env.PORT || "4173", 10), // Dynamiczny port
   },
   preview: {
-    host: "0.0.0.0", // Nasłuchuj na wszystkich interfejsach podczas preview
-    port: parseInt(process.env.PORT || "4173", 10),
+    host: "0.0.0.0",
+    port: parseInt(process.env.PORT || "4173", 10), // Dynamiczny port
   },
   plugins: [
     react(),

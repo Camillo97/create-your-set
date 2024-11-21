@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/components/ui/use-toast";
+import { Package, Truck, CircleCheck } from "lucide-react";
 
 interface Product {
   id: string;
@@ -25,6 +26,7 @@ const Index = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPolishes, setSelectedPolishes] = useState<string[]>([]);
+  const [quantity, setQuantity] = useState(1);
 
   const images = [
     "/placeholder.svg",
@@ -67,12 +69,20 @@ const Index = () => {
     setSelectedPolishes([]);
   };
 
+  const decrementQuantity = () => {
+    if (quantity > 1) setQuantity(quantity - 1);
+  };
+
+  const incrementQuantity = () => {
+    setQuantity(quantity + 1);
+  };
+
   return (
     <div className="container mx-auto px-4 py-4 sm:py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
         {/* Left column - Images */}
         <div className="space-y-4">
-          <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+          <div className="aspect-square bg-white rounded-lg overflow-hidden border border-gray-200">
             <img
               src={images[selectedImage]}
               alt="Product"
@@ -84,8 +94,8 @@ const Index = () => {
               <button
                 key={index}
                 onClick={() => setSelectedImage(index)}
-                className={`aspect-square bg-gray-100 rounded-md overflow-hidden ${
-                  selectedImage === index ? "ring-2 ring-primary" : ""
+                className={`aspect-square bg-white rounded-md overflow-hidden border ${
+                  selectedImage === index ? "border-primary" : "border-gray-200"
                 }`}
               >
                 <img src={image} alt="Thumbnail" className="w-full h-full object-cover" />
@@ -95,16 +105,70 @@ const Index = () => {
         </div>
 
         {/* Right column - Product info */}
-        <div className="space-y-4 sm:space-y-6">
-          <h1 className="text-2xl sm:text-3xl font-semibold">Zestaw lakierów hybrydowych Bestsellers</h1>
-          <div className="space-y-2">
-            <p className="text-xl sm:text-2xl font-bold">199,99 zł</p>
+        <div className="space-y-6">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">Zestaw lakierów hybrydowych Bestsellers</h1>
+          
+          <div className="flex flex-col space-y-4">
+            {/* Product details */}
+            <div className="flex items-center space-x-2 text-sm text-gray-600">
+              <CircleCheck className="w-5 h-5 text-green-500" />
+              <span>Dostępny</span>
+              <Truck className="w-5 h-5 ml-4" />
+              <span>Wysyłka 24h</span>
+            </div>
+
+            <div className="space-y-3 border-t border-b py-4">
+              <div className="flex items-center space-x-2 text-sm">
+                <Package className="w-5 h-5" />
+                <span className="text-gray-600">Pojemność</span>
+                <span className="font-medium">8ml</span>
+              </div>
+              <div className="flex items-center space-x-2 text-sm">
+                <span className="text-gray-600">Przeznaczenie:</span>
+                <span className="font-medium">do manicure hybrydowego</span>
+              </div>
+              <div className="flex items-center space-x-2 text-sm">
+                <span className="text-gray-600">Kolekcja:</span>
+                <span className="font-medium">Bestsellers</span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="text-3xl font-bold">199,99 zł</div>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={decrementQuantity}
+                  className="w-8 h-8 flex items-center justify-center border rounded-md"
+                >
+                  -
+                </button>
+                <span className="w-12 text-center">{quantity}</span>
+                <button
+                  onClick={incrementQuantity}
+                  className="w-8 h-8 flex items-center justify-center border rounded-md"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
             <button
               onClick={() => setIsModalOpen(true)}
-              className="w-full py-3 px-4 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors"
+              className="w-full py-3 px-4 bg-primary text-white rounded-md hover:bg-primary-hover transition-colors text-lg font-medium"
             >
               Stwórz zestaw
             </button>
+
+            <div className="flex justify-between items-center pt-4">
+              <button className="flex items-center space-x-2 text-gray-600 hover:text-gray-900">
+                <span>Zapytaj o produkt</span>
+              </button>
+              <button className="text-gray-600 hover:text-gray-900">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -116,7 +180,7 @@ const Index = () => {
             <DialogTitle className="text-xl sm:text-2xl font-semibold">Stwórz własny zestaw</DialogTitle>
           </DialogHeader>
           <div className="mt-4">
-            <p className="text-sm sm:text-base text-gray-600 mb-2">
+            <p className="text-sm sm:text-base text-gray-600 mb-4">
               Wybierz do {MAX_SELECTIONS} lakierów hybrydowych do swojego zestawu. Pozostało:{" "}
               <span className="font-semibold">
                 {MAX_SELECTIONS - selectedPolishes.length} z {MAX_SELECTIONS}
